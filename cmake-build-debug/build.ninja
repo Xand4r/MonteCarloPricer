@@ -67,6 +67,12 @@ build CMakeFiles/MonteCarloPricer.dir/Payoff.cpp.obj: CXX_COMPILER__MonteCarloPr
   OBJECT_DIR = CMakeFiles\MonteCarloPricer.dir
   OBJECT_FILE_DIR = CMakeFiles\MonteCarloPricer.dir
 
+build CMakeFiles/MonteCarloPricer.dir/Timecalc.cpp.obj: CXX_COMPILER__MonteCarloPricer_unscanned_Debug C$:/Users/david/CLionProjects/MonteCarloPricer/Timecalc.cpp || cmake_object_order_depends_target_MonteCarloPricer
+  DEP_FILE = CMakeFiles\MonteCarloPricer.dir\Timecalc.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\MonteCarloPricer.dir
+  OBJECT_FILE_DIR = CMakeFiles\MonteCarloPricer.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target MonteCarloPricer
@@ -75,7 +81,7 @@ build CMakeFiles/MonteCarloPricer.dir/Payoff.cpp.obj: CXX_COMPILER__MonteCarloPr
 #############################################
 # Link the executable MonteCarloPricer.exe
 
-build MonteCarloPricer.exe: CXX_EXECUTABLE_LINKER__MonteCarloPricer_Debug CMakeFiles/MonteCarloPricer.dir/main.cpp.obj CMakeFiles/MonteCarloPricer.dir/MonteCarlo.cpp.obj CMakeFiles/MonteCarloPricer.dir/Payoff.cpp.obj
+build MonteCarloPricer.exe: CXX_EXECUTABLE_LINKER__MonteCarloPricer_Debug CMakeFiles/MonteCarloPricer.dir/main.cpp.obj CMakeFiles/MonteCarloPricer.dir/MonteCarlo.cpp.obj CMakeFiles/MonteCarloPricer.dir/Payoff.cpp.obj CMakeFiles/MonteCarloPricer.dir/Timecalc.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\MonteCarloPricer.dir
