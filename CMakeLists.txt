@@ -7,4 +7,6 @@ add_executable(MonteCarloPricer main.cpp
         MonteCarlo.cpp
         MonteCarlo.h
         Payoff.cpp
-        Payoff.h)
+        Payoff.h
+        Timecalc.cpp
+        Timecalc.h)
