@@ -1,4 +1,5 @@
-"C:\Program Files\JetBrains\CLion 2024.2.3\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2024.2.3/bin/ninja/win/x64/ninja.exe" -G Ninja -S C:\Users\david\CLionProjects\MonteCarloPricer -B C:\Users\david\CLionProjects\MonteCarloPricer\cmake-build-debug
--- Configuring done (0.3s)
+/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/opt/homebrew/opt/curl -G "Unix Makefiles" -S /Users/alexanderklasen/CLionProjects/MonteCarloPricer -B /Users/alexanderklasen/CLionProjects/MonteCarloPricer/cmake-build-debug
+-- Found nlohmann_json: /opt/homebrew/share/cmake/nlohmann_json/nlohmann_jsonConfig.cmake (found version "3.11.3")
+-- Configuring done (0.0s)
 -- Generating done (0.0s)
--- Build files have been written to: C:/Users/david/CLionProjects/MonteCarloPricer/cmake-build-debug
+-- Build files have been written to: /Users/alexanderklasen/CLionProjects/MonteCarloPricer/cmake-build-debug

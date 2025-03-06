@@ -3,19 +3,31 @@
 #include "MonteCarlo.h"
 #include "Payoff.h"
 #include "Timecalc.h"
+#include "API_Acc.h"
 
 using namespace std;
 using std::vector;
 
 int main() {
+    API_Acc acc;
+    string symbol = "DIS";
+    vector<double> test = acc.getdata(symbol);
+    for (double i: test) {
+        cout << i << endl;
+    }
+
+
+
+
+
     int day, month, year;
-    char openParen, comma1, comma2, closeParen;
+    char openParen, dot1, dot2, closeParen;
     bool corrdate = true;
 
     while(corrdate) {
-        cout << "Enter a date in the format (dd, mm, yyyy): ";
-        if (cin >> openParen >> day >> comma1 >> month >> comma2 >> year >> closeParen &&
-            openParen == '(' && comma1 == ',' && comma2 == ',' && closeParen == ')') {
+        cout << "Enter a date in the format (dd. mm. yyyy): ";
+        if (cin >> openParen >> day >> dot1 >> month >> dot2 >> year >> closeParen &&
+            openParen == '(' && dot1 == '.' && dot2 == '.' && closeParen == ')') {
             cout << "You entered: " << day << "-" << month << "-" << year << endl;
             corrdate = false;
             } else {
