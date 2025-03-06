@@ -1,5 +1,0 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/opt/homebrew/opt/curl -G "Unix Makefiles" -S /Users/alexanderklasen/CLionProjects/MonteCarloPricer -B /Users/alexanderklasen/CLionProjects/MonteCarloPricer/cmake-build-debug
--- Found nlohmann_json: /opt/homebrew/share/cmake/nlohmann_json/nlohmann_jsonConfig.cmake (found version "3.11.3")
--- Configuring done (0.0s)
--- Generating done (0.0s)
--- Build files have been written to: /Users/alexanderklasen/CLionProjects/MonteCarloPricer/cmake-build-debug
