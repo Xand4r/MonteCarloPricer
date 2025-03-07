@@ -4,6 +4,14 @@
 
 #ifndef API_ACC_H
 #define API_ACC_H
+
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#define NOGDI
+#include <windows.h>
+#endif
+
 #include <curl/curl.h>
 #include <string>
 #include <nlohmann/json.hpp>
