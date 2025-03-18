@@ -9,26 +9,24 @@ using namespace std;
 using std::vector;
 
 int main() {
+
     API_Acc acc;
     string symbol = "DIS";
-    vector<double> test = acc.getdata(symbol);
-    for (double i: test) {
-        cout << i << endl;
+    vector<double> prices = acc.getdata(symbol);
+    for (double i: prices) {
+        cout << "price: " << i << endl;
     }
 
-
-
-
-
     int day, month, year;
-    char openParen, dot1, dot2, closeParen;
+    char dot1, dot2;
     bool corrdate = true;
+    string weekday = "";
 
     while(corrdate) {
-        cout << "Enter a date in the format (dd. mm. yyyy): ";
-        if (cin >> openParen >> day >> dot1 >> month >> dot2 >> year >> closeParen &&
-            openParen == '(' && dot1 == '.' && dot2 == '.' && closeParen == ')') {
-            cout << "You entered: " << day << "-" << month << "-" << year << endl;
+        cout << "Enter a date in the format (dd. mm. yyyy) and a Weekday (Mon/Tue/Wed/Thu/Fri/Sat): ";
+        if (cin >> day >> dot1 >> month >> dot2 >> year >>  weekday  &&
+        dot1 == '.' && dot2 == '.' ) {
+            cout << "You entered: " << day << "-" << month << "-" << year << " weekday: "<< weekday <<endl;
             corrdate = false;
             } else {
                 cout << "Invalid date format!" << endl;
@@ -39,11 +37,30 @@ int main() {
 
     Timecalc timecalc;
 
-    double price = 100;
-    double mu = 0.05;
-    double sigma = 0.2;
-    int days = timecalc.daysuntilexpiration(day, month, year);
+    double price = prices.back();
+    double mu = 0.0;
+    double sigma = 0.0;
+    int days = timecalc.daysuntilexpiration(day, month, year, weekday);
+    //int days = 126;
     double dt = 1.0/252.0;
+
+
+    double meanreturn= 0.0;
+    vector<double> payoffs;
+
+    for(int i = 1; i < prices.size(); i++) {
+        double logreturn = log(prices[i]/prices[i-1]);
+        payoffs.push_back(logreturn);
+        meanreturn += logreturn;
+    }
+    meanreturn = meanreturn/payoffs.size();
+    double s2 = 0.0;
+    for (double i: payoffs) {
+        s2 += pow(i-meanreturn,2.0)/(payoffs.size()-1);
+    }
+    mu = (meanreturn+ 0.5*s2) * 252;
+    sigma = sqrt(s2)*sqrt(252);
+    cout << "sigma = " << sigma << " mu = " << mu << endl;
 
 
     MonteCarlo monteCarlo;
@@ -55,9 +72,9 @@ int main() {
     }
 
 
-    CallOption call_option(120);
+    CallOption call_option(105.0);
 
-    double expected_payoff = call_option.payoff_calc(stock_paths,call_option.strike);
+    double expected_payoff = call_option.payoff_calc(stock_paths, call_option.strike, days);
     cout << "Expected optionvalue: " << expected_payoff << endl;
 
 }

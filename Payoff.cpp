@@ -1,7 +1,9 @@
 #include "Payoff.h"
 #include <algorithm>
+#include <iostream>
+using namespace std;
 
-double CallOption::payoff_calc(vector<vector<double>> stock_paths, double strike) {
+double CallOption::payoff_calc(vector<vector<double>> stock_paths, double strike, int days) {
     if (stock_paths.empty()) {
         return 0.0;
     }
@@ -12,12 +14,12 @@ double CallOption::payoff_calc(vector<vector<double>> stock_paths, double strike
         payoffs.push_back(max(last_price-strike,0.0));
     }
     for (double payoff : payoffs) {
-        sum += payoff/payoffs.size();
+        sum += payoff;
     }
-    return sum;
+    return (sum/payoffs.size())*exp(-0.05*days/252.0);
 };
 
-double PutOption::payoff_calc(vector<vector<double>> stock_paths, double strike) {
+double PutOption::payoff_calc(vector<vector<double>> stock_paths, double strike, int days) {
     if (stock_paths.empty()) {
         return 0.0;
     }
@@ -30,6 +32,5 @@ double PutOption::payoff_calc(vector<vector<double>> stock_paths, double strike)
     for (double payoff : payoffs) {
         sum += payoff;
     }
-    sum = sum/payoffs.size();
-    return sum;
+    return (sum/payoffs.size())*exp(-0.05*days/252.0);
 };

@@ -14,8 +14,7 @@ vector<double> MonteCarlo::simulated_stock_prices(double price, double mu, doubl
     vector<double> prices;
     prices.push_back(price);
     double Si = price;;
-    for (int i = 1; i < days; i++) {
-        //cout << "Si = " << Si << endl;
+    for (int i = 1; i <= days; i++) {
         double Z = distribution(gen);
         Si = Si * exp((mu - 0.5 * sigma * sigma) * dt + sigma * sqrt(dt) * Z);
         prices.push_back(Si);

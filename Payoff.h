@@ -7,7 +7,7 @@ using namespace std;
 using std::vector;
 class Payoff {
     public:
-        virtual double payoff_calc(vector<vector<double>> stock_paths, double strike) = 0;
+        virtual double payoff_calc(vector<vector<double>> stock_paths, double strike, int days) = 0;
     virtual ~Payoff() {}
 };
 
@@ -17,7 +17,7 @@ class CallOption : public Payoff {
     CallOption(double strike) {
         this->strike = strike;
     }
-    double payoff_calc(vector<vector<double>> stock_paths, double strike) override;
+    double payoff_calc(vector<vector<double>> stock_paths, double strike, int days) override;
 };
 
 class PutOption : public Payoff {
@@ -26,7 +26,7 @@ public:
     PutOption(double strike) {
         this->strike = strike;
     }
-    double payoff_calc(vector<vector<double>> stock_paths, double strike) override;
+    double payoff_calc(vector<vector<double>> stock_paths, double strike, int days) override;
 };
 
 
