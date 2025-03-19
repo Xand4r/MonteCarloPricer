@@ -22,7 +22,8 @@ using json = nlohmann::json;
 class API_Acc {
     public:
     static size_t callback(char *content, size_t size, size_t nmemb, string data);
-    vector<double> getdata(string& symbol);
+    vector<double> getstockdata(string& symbol);
+    vector<vector<double>> gettreasuryyielddata();
 
 
 

@@ -12,9 +12,17 @@ int main() {
 
     API_Acc acc;
     string symbol = "DIS";
-    vector<double> prices = acc.getdata(symbol);
+    vector<double> prices = acc.getstockdata(symbol);
     for (double i: prices) {
         cout << "price: " << i << endl;
+    }
+
+    vector<vector<double>> treasuryyielddata = acc.gettreasuryyielddata();
+    for (vector<double> i: treasuryyielddata) {
+        for (double j: i) {
+            cout << "value: " << j << " ";
+        }
+        cout << endl;
     }
 
     int day, month, year;
