@@ -4,6 +4,7 @@
 #include "Payoff.h"
 #include "Timecalc.h"
 #include "API_Acc.h"
+#include "Interpolation.h"
 
 using namespace std;
 using std::vector;
@@ -11,27 +12,25 @@ using std::vector;
 int main() {
 
     API_Acc acc;
+
     string symbol = "DIS";
     vector<double> prices = acc.getstockdata(symbol);
-    for (double i: prices) {
-        cout << "price: " << i << endl;
-    }
 
     vector<vector<double>> treasuryyielddata = acc.gettreasuryyielddata();
-    for (vector<double> i: treasuryyielddata) {
-        for (double j: i) {
-            cout << "value: " << j << " ";
-        }
-        cout << endl;
-    }
+    vector<double> x_vals = treasuryyielddata[0];
+    vector<double> y_vals = treasuryyielddata[1];
+    CubicSpline spline(x_vals, y_vals);
 
+    cout<< "spline interpolate: " << spline.interpolate(1095.0) << " actual value: " << y_vals[1] << endl;
+
+/*
     int day, month, year;
     char dot1, dot2;
     bool corrdate = true;
     string weekday = "";
 
     while(corrdate) {
-        cout << "Enter a date in the format (dd. mm. yyyy) and a Weekday (Mon/Tue/Wed/Thu/Fri/Sat): ";
+        cout << "Enter a date in the format (dd. mm. yyyy) and a Weekday (Mon/Tue/Wed/Thu/Fri/Sat/Sun): ";
         if (cin >> day >> dot1 >> month >> dot2 >> year >>  weekday  &&
         dot1 == '.' && dot2 == '.' ) {
             cout << "You entered: " << day << "-" << month << "-" << year << " weekday: "<< weekday <<endl;
@@ -84,5 +83,5 @@ int main() {
 
     double expected_payoff = call_option.payoff_calc(stock_paths, call_option.strike, days);
     cout << "Expected optionvalue: " << expected_payoff << endl;
-
+*/
 }

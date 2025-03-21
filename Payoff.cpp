@@ -1,7 +1,9 @@
 #include "Payoff.h"
 #include <algorithm>
 #include <iostream>
+#include <cmath>
 using namespace std;
+
 
 double CallOption::payoff_calc(vector<vector<double>> stock_paths, double strike, int days) {
     if (stock_paths.empty()) {

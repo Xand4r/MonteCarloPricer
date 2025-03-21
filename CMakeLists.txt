@@ -14,7 +14,9 @@ add_executable(MonteCarloPricer main.cpp
         Timecalc.cpp
         Timecalc.h
         API_Acc.cpp
-        API_Acc.h)
+        API_Acc.h
+        Interpolation.cpp
+        Interpolation.h)
 
 target_link_libraries(MonteCarloPricer PRIVATE
         CURL::libcurl
