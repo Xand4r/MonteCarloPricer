@@ -11,26 +11,23 @@ using std::vector;
 
 int main() {
 
-    API_Acc acc;
+    API_Acc access_data;
 
-    string symbol = "DIS";
-    vector<double> prices = acc.getstockdata(symbol);
+    string symbol = "AAPL";
+    vector<double> prices = access_data.getstockdata(symbol);
 
-    vector<vector<double>> treasuryyielddata = acc.gettreasuryyielddata();
+    vector<vector<double>> treasuryyielddata = access_data.gettreasuryyielddata();
     vector<double> x_vals = treasuryyielddata[0];
     vector<double> y_vals = treasuryyielddata[1];
     CubicSpline spline(x_vals, y_vals);
 
-    cout<< "spline interpolate: " << spline.interpolate(1095.0) << " actual value: " << y_vals[1] << endl;
-
-/*
     int day, month, year;
     char dot1, dot2;
     bool corrdate = true;
     string weekday = "";
 
     while(corrdate) {
-        cout << "Enter a date in the format (dd. mm. yyyy) and a Weekday (Mon/Tue/Wed/Thu/Fri/Sat/Sun): ";
+        cout << "Enter a date in the format dd. mm. yyyy and the current Weekday Mon/Tue/Wed/Thu/Fri/Sat/Sun: ";
         if (cin >> day >> dot1 >> month >> dot2 >> year >>  weekday  &&
         dot1 == '.' && dot2 == '.' ) {
             cout << "You entered: " << day << "-" << month << "-" << year << " weekday: "<< weekday <<endl;
@@ -48,8 +45,8 @@ int main() {
     double mu = 0.0;
     double sigma = 0.0;
     int days = timecalc.daysuntilexpiration(day, month, year, weekday);
-    //int days = 126;
-    double dt = 1.0/252.0;
+    double dt = 1.0/261;
+    double riskfree_rate = spline.interpolate(timecalc.daysinbetween(day, month, year))/100;
 
 
     double meanreturn= 0.0;
@@ -62,26 +59,34 @@ int main() {
     }
     meanreturn = meanreturn/payoffs.size();
     double s2 = 0.0;
-    for (double i: payoffs) {
-        s2 += pow(i-meanreturn,2.0)/(payoffs.size()-1);
+    for (double r: payoffs) {
+        s2 += pow(r-meanreturn,2.0);
     }
-    mu = (meanreturn+ 0.5*s2) * 252;
-    sigma = sqrt(s2)*sqrt(252);
-    cout << "sigma = " << sigma << " mu = " << mu << endl;
+    s2 /= payoffs.size()-1;
+    mu = riskfree_rate;
+    //mu = meanreturn * 261;
+    sigma = sqrt(s2)*sqrt(261);
 
 
     MonteCarlo monteCarlo;
 
     vector<vector<double>> stock_paths;
-    for (int i = 0; i < 100000; i++) {
+    for (int i = 0; i < 1000000; i++) {
         vector<double> path = monteCarlo.simulated_stock_prices(price,mu,sigma,days,dt);
         stock_paths.push_back(path);
     }
 
 
-    CallOption call_option(105.0);
+    CallOption call_option(100.0, riskfree_rate);
 
-    double expected_payoff = call_option.payoff_calc(stock_paths, call_option.strike, days);
+    double expected_payoff = call_option.payoff_calc(stock_paths, call_option.strike, days, call_option.riskfree_rate);
     cout << "Expected optionvalue: " << expected_payoff << endl;
-*/
+    cout << "Strike price: " << call_option.strike << endl;
+    cout << "riskfree rate: " << riskfree_rate << endl;
+    cout << "volatility : " << sigma << endl;
+    cout << "drift : " << mu << endl;
+    cout << "days: " << timecalc.daysinbetween(day, month, year) << endl;
+    cout << "last price: "<< prices.back() << endl;
+
+
 }

@@ -11,6 +11,7 @@ class Timecalc {
 public:
 
     int daysuntilexpiration(int d, int m, int y, string day);
+    int daysinbetween(int d, int m, int y);
 };
 
 

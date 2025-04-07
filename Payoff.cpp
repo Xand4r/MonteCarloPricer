@@ -5,7 +5,7 @@
 using namespace std;
 
 
-double CallOption::payoff_calc(vector<vector<double>> stock_paths, double strike, int days) {
+double CallOption::payoff_calc(vector<vector<double>> stock_paths, double strike, int days, double riskfree_rate) {
     if (stock_paths.empty()) {
         return 0.0;
     }
@@ -18,10 +18,10 @@ double CallOption::payoff_calc(vector<vector<double>> stock_paths, double strike
     for (double payoff : payoffs) {
         sum += payoff;
     }
-    return (sum/payoffs.size())*exp(-0.05*days/252.0);
+    return (sum/payoffs.size())*exp(-riskfree_rate*days/261.0);
 };
 
-double PutOption::payoff_calc(vector<vector<double>> stock_paths, double strike, int days) {
+double PutOption::payoff_calc(vector<vector<double>> stock_paths, double strike, int days, double riskfree_rate) {
     if (stock_paths.empty()) {
         return 0.0;
     }
@@ -34,5 +34,5 @@ double PutOption::payoff_calc(vector<vector<double>> stock_paths, double strike,
     for (double payoff : payoffs) {
         sum += payoff;
     }
-    return (sum/payoffs.size())*exp(-0.05*days/252.0);
+    return (sum/payoffs.size())*exp(-riskfree_rate*days/261.0);
 };

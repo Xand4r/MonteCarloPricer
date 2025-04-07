@@ -1,7 +1,12 @@
 #include "Interpolation.h"
 #include <vector>
 #include <iostream>
+#include <ceres/ceres.h>
+#include <eigen3/Eigen/Dense>
+#include <eigen3/Eigen/Core>
 using namespace std;
+using namespace Eigen;
+using namespace ceres;
 
 CubicSpline::CubicSpline(const vector<double>& x_vals, const vector<double>& y_vals) : x(x_vals), y(y_vals), n(x_vals.size()) {
     a = y;
@@ -12,12 +17,14 @@ CubicSpline::CubicSpline(const vector<double>& x_vals, const vector<double>& y_v
 }
 
 int CubicSpline::findSegment(double x_val) const {
-    if (x_val < x[0] || x_val > x[n - 1]) {
-        cout << "kaputt" << endl;
-        return -1;
+    if (x_val < x[0]){
+        return 0;
+    }
+    if (x_val > x[n-1]) {
+        return n-1;
     }
 
-    for (int i = 0; i < n - 1; ++i) {
+    for (int i = 0; i < n - 1; i++) {
         if (x_val >= x[i] && x_val <= x[i + 1]) {
             return i;
         }
@@ -28,7 +35,7 @@ int CubicSpline::findSegment(double x_val) const {
 void CubicSpline::computeCoefficients() {
     vector<double> h(n - 1), alpha(n - 1), l(n), mu(n), z(n);
 
-    for (int i = 0; i < n - 1; ++i) {
+    for (int i = 0; i < n - 1; i++) {
         h[i] = x[i + 1] - x[i];
         alpha[i] = (i == 0) ? 0 : (3 / h[i] * (a[i + 1] - a[i]) - 3 / h[i - 1] * (a[i] - a[i - 1]));
     }
@@ -57,7 +64,7 @@ void CubicSpline::computeCoefficients() {
 double CubicSpline::interpolate(double x_val) {
     int i = findSegment(x_val);
     double dx = x_val - x[i];
-    cout << "derivative = " << 6*d[i]*dx + 2*c[i] << endl;
-    cout << "derivative = " << 2*c[i+1] << endl;
     return a[i] + b[i] * dx + c[i] * dx * dx + d[i] * dx * dx * dx;
 };
+
+
