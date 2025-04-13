@@ -7,7 +7,7 @@
 using namespace std;
 using namespace Eigen;
 
-CubicSpline::CubicSpline(const vector<double>& x_vals, const vector<double>& y_vals) : x(x_vals), y(y_vals), n(x_vals.size()) {
+Interpolation::Interpolation(const vector<double>& x_vals, const vector<double>& y_vals) : x(x_vals), y(y_vals), n(x_vals.size()) {
     a = y;
     b.resize(n);
     c.resize(n);
@@ -15,7 +15,7 @@ CubicSpline::CubicSpline(const vector<double>& x_vals, const vector<double>& y_v
     computeCoefficients();
 }
 
-int CubicSpline::findSegment(double x_val) const {
+int Interpolation::findSegment(double x_val) const {
     if (x_val < x[0]){
         return 0;
     }
@@ -31,7 +31,7 @@ int CubicSpline::findSegment(double x_val) const {
     return -1; // Should never reach here
 };
 
-void CubicSpline::computeCoefficients() {
+void Interpolation::computeCoefficients() {
     vector<double> h(n - 1), alpha(n - 1), l(n), mu(n), z(n);
 
     for (int i = 0; i < n - 1; i++) {
@@ -60,7 +60,7 @@ void CubicSpline::computeCoefficients() {
     }
 };
 
-double CubicSpline::interpolate(double x_val) {
+double Interpolation::interpolate(double x_val) {
     int i = findSegment(x_val);
     double dx = x_val - x[i];
     return a[i] + b[i] * dx + c[i] * dx * dx + d[i] * dx * dx * dx;

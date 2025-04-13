@@ -38,11 +38,11 @@ int main() {
     // Accessing API for stock price data and treasury yield data
     API_Acc access_data;
 
-    string symbol = "APPLE"; // stock symbol
+    string symbol = "AAPL"; // stock symbol
     int put_or_call; // 0=Put, 1=Call
 
     Timecalc timecalc;
-    int days = timecalc.daysuntilexpiration(day, month, year, weekday); // amount of workdays
+    int days = timecalc.DaysUntilExpiration(day, month, year, weekday); // amount of workdays
     vector<double> prices = access_data.GetStockData(symbol, 3*days); // gets historic price data from 3x the amount of days in relation to the expiry date
     vector<vector<double>> treasury_yield_data = access_data.GetTreasuryYieldData(); // gets current treasury yield data
     const vector<double>& time_values = treasury_yield_data[0]; // vector with day amounts of US treasury securities (ascending order)
@@ -56,7 +56,7 @@ int main() {
     double dt = 1.0/261; // timestep one day of 261 workdays in a year
     //interpolates risk free-rate between two corresponding treasury securities with close maturity dates
     Interpolation interpolate(time_values, rates);
-    double risk_free_rate = interpolate.interpolate(timecalc.daysinbetween(day, month, year))/100;
+    double risk_free_rate = interpolate.interpolate(timecalc.DaysInbetween(day, month, year))/100;
 
     //calculating the volatility of given stock
     double mean_return= 0.0; //average return of given stock over given time frame
@@ -104,7 +104,7 @@ int main() {
     cout << "risk free rate: " << risk_free_rate << endl;
     cout << "volatility : " << sigma << endl;
     cout << "drift : " << mu << endl;
-    cout << "days: " << timecalc.daysinbetween(day, month, year) << endl;
+    cout << "days: " << timecalc.DaysInbetween(day, month, year) << endl;
     cout << "last price: "<< prices.back() << endl;
 
 
