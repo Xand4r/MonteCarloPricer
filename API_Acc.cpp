@@ -1,6 +1,3 @@
-//
-// Created by Alexander Klasen on 05.03.25.
-//
 #include "API_Acc.h"
 
 #include <iostream>
@@ -14,7 +11,7 @@ using json = nlohmann::json;
     data.append(content, size * nmemb);
     return size * nmemb;
 }
-    json API_Acc::parser(string url) {
+    json API_Acc::parser(const string& url) {
         CURL *curl = curl_easy_init();
         CURLcode res;
         string result;
@@ -30,27 +27,35 @@ using json = nlohmann::json;
         return j;
     }
 
-
-vector<double> API_Acc::getstockdata(string& symbol) {
-    string url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol + "&datatype=json&apikey=57QUQNLQ3C62WQIO";
-
+//inputs a specific day amount of stockdata in a vector and returns it
+vector<double> API_Acc::GetStockData(string& symbol, int day_amount) {
+    const string url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol + "&outputsize=full&datatype=json&apikey=57QUQNLQ3C62WQIO";
     vector<double> prices;
     json j = parser(url);
-    json closingprices = j["Time Series (Daily)"];
-    for(json item : closingprices) {
-        double price = stod(item["4. close"].get<string>());
+    json closing_prices = j["Time Series (Daily)"];
+    vector<pair<string, json>> entries;
+    for (auto& [date, data] : closing_prices.items()) {
+        entries.push_back({date, data});
+    }
+    sort(entries.begin(), entries.end());
+    int start_index = entries.size()-day_amount;
+    if (start_index < 0) {
+        start_index = 0;
+    }
+    for(int i = start_index; i < entries.size(); i++) {
+        double price = stod(entries[i].second["4. close"].get<string>());
         prices.push_back(price);
     }
     return prices;
 }
-
-vector<vector<double>> API_Acc::gettreasuryyielddata() {
-        vector<string> timeperiods = {"DGS1MO", "DGS3MO", "DGS6MO", "DGS1", "DGS2", "DGS3", "DGS5", "DGS7", "DGS10", "DGS20", "DGS30"};
+// gets US treasury yield data for specific timeframes ranging from a month to 30 years and returns the all the rates as tuples with their corresponding maturity in a vector
+vector<vector<double>> API_Acc::GetTreasuryYieldData() {
+        vector<string> time_periods = {"DGS1MO", "DGS3MO", "DGS6MO", "DGS1", "DGS2", "DGS3", "DGS5", "DGS7", "DGS10", "DGS20", "DGS30"};
         vector<double> day_amount = {30.0, 90.0, 180.0, 360.0, 730.0, 1095.0, 1825.0, 2555.0, 3650.0, 7300.0, 10950.0};
         vector<vector<double>> all_treasury_yields;
 
         vector<double> values;
-        for (string i : timeperiods) {
+        for (string i : time_periods) {
             string url = "https://api.stlouisfed.org/fred/series/observations?series_id=" + i + "&api_key=76ba0991fa6e0da31852aac2c918561e&file_type=json";
             json j = parser(url);
             double newest_yield = stod( j["observations"].back()["value"].get<string>());

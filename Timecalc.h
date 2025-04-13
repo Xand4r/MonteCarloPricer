@@ -10,8 +10,8 @@ using std::string;
 class Timecalc {
 public:
 
-    int daysuntilexpiration(int d, int m, int y, string day);
-    int daysinbetween(int d, int m, int y);
+    int DaysInbetween(int d, int m, int y); //calculates amount of days inbetween two dates
+    int DaysUntilExpiration(int d, int m, int y, string day); //removes weekends in DaysInbetween calculation (just workdays)
 };
 
 

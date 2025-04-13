@@ -1,7 +1,3 @@
-//
-// Created by Alexander Klasen on 05.03.25.
-//
-
 #ifndef API_ACC_H
 #define API_ACC_H
 
@@ -21,11 +17,11 @@ using json = nlohmann::json;
 
 class API_Acc {
     public:
-    vector<double> getstockdata(string& symbol);
-    vector<vector<double>> gettreasuryyielddata();
+    vector<double> GetStockData(string& symbol, int days); //gets stockdata on a specific company from an API
+    vector<vector<double>> GetTreasuryYieldData(); //gets treasury yield rates on US government bonds
     private:
-    static size_t callback(char *content, size_t size, size_t nmemb, string data);
-    json parser(string url);
+    static size_t callback(char *content, size_t size, size_t nmemb, string data); //callback function for API calls
+    static json parser(const string& url); // parses received data into a json
 
 
 

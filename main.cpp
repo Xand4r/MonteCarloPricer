@@ -11,78 +11,97 @@ using std::vector;
 
 int main() {
 
-    API_Acc access_data;
-
-    string symbol = "AAPL";
-    vector<double> prices = access_data.getstockdata(symbol);
-
-    vector<vector<double>> treasuryyielddata = access_data.gettreasuryyielddata();
-    vector<double> x_vals = treasuryyielddata[0];
-    vector<double> y_vals = treasuryyielddata[1];
-    CubicSpline spline(x_vals, y_vals);
-
+    //setting expiry date of the option
     int day, month, year;
     char dot1, dot2;
-    bool corrdate = true;
-    string weekday = "";
+    bool correct_date = true;
+    string weekday;
 
-    while(corrdate) {
+    while(correct_date) {
         cout << "Enter a date in the format dd. mm. yyyy and the current Weekday Mon/Tue/Wed/Thu/Fri/Sat/Sun: ";
         if (cin >> day >> dot1 >> month >> dot2 >> year >>  weekday  &&
         dot1 == '.' && dot2 == '.' ) {
             cout << "You entered: " << day << "-" << month << "-" << year << " weekday: "<< weekday <<endl;
-            corrdate = false;
-            } else {
-                cout << "Invalid date format!" << endl;
-                cin.clear();
-                cin.ignore(1000, '\n');
-            }
+            correct_date = false;
+        } else {
+            cout << "Invalid date format!" << endl;
+            cin.clear();
+            cin.ignore(1000, '\n');
+        }
     }
+
+    //setting strike price of the option
+    double strike_price = 0.0;
+    cout << "what is your options strike price: " << endl;
+    cin >> strike_price;
+
+    // Accessing API for stock price data and treasury yield data
+    API_Acc access_data;
+
+    string symbol = "APPLE"; // stock symbol
+    int put_or_call; // 0=Put, 1=Call
 
     Timecalc timecalc;
-
-    double price = prices.back();
-    double mu = 0.0;
-    double sigma = 0.0;
-    int days = timecalc.daysuntilexpiration(day, month, year, weekday);
-    double dt = 1.0/261;
-    double riskfree_rate = spline.interpolate(timecalc.daysinbetween(day, month, year))/100;
+    int days = timecalc.daysuntilexpiration(day, month, year, weekday); // amount of workdays
+    vector<double> prices = access_data.GetStockData(symbol, 3*days); // gets historic price data from 3x the amount of days in relation to the expiry date
+    vector<vector<double>> treasury_yield_data = access_data.GetTreasuryYieldData(); // gets current treasury yield data
+    const vector<double>& time_values = treasury_yield_data[0]; // vector with day amounts of US treasury securities (ascending order)
+    const vector<double>& rates = treasury_yield_data[1]; // // vector with rates of corresponding US treasury securities(ascending order)
 
 
-    double meanreturn= 0.0;
+    //finding volatility, drift, risk-free rate and amount of workdays for stock path generation
+    double price = prices.back(); // last closing price of chosen stock
+    double mu = 0.0; // drift
+    double sigma = 0.0; // volatility
+    double dt = 1.0/261; // timestep one day of 261 workdays in a year
+    //interpolates risk free-rate between two corresponding treasury securities with close maturity dates
+    Interpolation interpolate(time_values, rates);
+    double risk_free_rate = interpolate.interpolate(timecalc.daysinbetween(day, month, year))/100;
+
+    //calculating the volatility of given stock
+    double mean_return= 0.0; //average return of given stock over given time frame
     vector<double> payoffs;
 
+    // calculates log returns between two dates and calculates mean return
     for(int i = 1; i < prices.size(); i++) {
-        double logreturn = log(prices[i]/prices[i-1]);
-        payoffs.push_back(logreturn);
-        meanreturn += logreturn;
+        double log_return = log(prices[i]/prices[i-1]);
+        payoffs.push_back(log_return);
+        mean_return += log_return;
     }
-    meanreturn = meanreturn/payoffs.size();
+    mean_return = mean_return/payoffs.size();
     double s2 = 0.0;
+    //calculates Variance of log returns
     for (double r: payoffs) {
-        s2 += pow(r-meanreturn,2.0);
+        s2 += pow(r-mean_return,2.0);
     }
     s2 /= payoffs.size()-1;
-    mu = riskfree_rate;
-    //mu = meanreturn * 261;
-    sigma = sqrt(s2)*sqrt(261);
+    mu = risk_free_rate; //final drift
+    //mu = mean_return * 261;
+    sigma = sqrt(s2)*sqrt(261); // final volatility
 
-
+    //stock path generation using Monte-Carlo simulations
     MonteCarlo monteCarlo;
-
     vector<vector<double>> stock_paths;
-    for (int i = 0; i < 1000000; i++) {
+    for (int i = 0; i < 100000; i++) {
         vector<double> path = monteCarlo.simulated_stock_prices(price,mu,sigma,days,dt);
         stock_paths.push_back(path);
     }
 
+    //calculates the expected payoff using the central limit theorem
+    double expected_payoff = -1.0;
+    if (put_or_call == 0) {
+        CallOption option;
+        expected_payoff = option.payoff_calc(stock_paths, strike_price, days, risk_free_rate);
+    }
+    else if (put_or_call == 1) {
+        PutOption option;
+        expected_payoff = option.payoff_calc(stock_paths, strike_price, days, risk_free_rate);
+    }
 
-    CallOption call_option(100.0, riskfree_rate);
 
-    double expected_payoff = call_option.payoff_calc(stock_paths, call_option.strike, days, call_option.riskfree_rate);
-    cout << "Expected optionvalue: " << expected_payoff << endl;
-    cout << "Strike price: " << call_option.strike << endl;
-    cout << "riskfree rate: " << riskfree_rate << endl;
+    cout << "Expected option value: " << expected_payoff << endl;
+    cout << "Strike price: " << strike_price << endl;
+    cout << "risk free rate: " << risk_free_rate << endl;
     cout << "volatility : " << sigma << endl;
     cout << "drift : " << mu << endl;
     cout << "days: " << timecalc.daysinbetween(day, month, year) << endl;

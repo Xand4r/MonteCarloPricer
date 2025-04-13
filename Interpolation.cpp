@@ -6,7 +6,6 @@
 #include <eigen3/Eigen/Core>
 using namespace std;
 using namespace Eigen;
-using namespace ceres;
 
 CubicSpline::CubicSpline(const vector<double>& x_vals, const vector<double>& y_vals) : x(x_vals), y(y_vals), n(x_vals.size()) {
     a = y;

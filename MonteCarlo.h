@@ -11,6 +11,7 @@ using std::vector;
 
 class MonteCarlo {
     public:
+        // generates stock paths using geometric Brownian motion
         vector<double> simulated_stock_prices(double price, double mu, double sigma, int days, double dt);
     private:
         random_device rd;
