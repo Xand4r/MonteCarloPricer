@@ -1,7 +1,6 @@
 #include "Interpolation.h"
 #include <vector>
 #include <iostream>
-#include <ceres/ceres.h>
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Core>
 using namespace std;

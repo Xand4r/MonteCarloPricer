@@ -18,7 +18,6 @@ public:
 
     void computeCoefficients();
     double interpolate(double x_val);
-
 };
 
 

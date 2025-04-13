@@ -98,7 +98,6 @@ int main() {
         expected_payoff = option.payoff_calc(stock_paths, strike_price, days, risk_free_rate);
     }
 
-
     cout << "Expected option value: " << expected_payoff << endl;
     cout << "Strike price: " << strike_price << endl;
     cout << "risk free rate: " << risk_free_rate << endl;
