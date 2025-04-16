@@ -32,7 +32,7 @@ int main() {
 
     //setting strike price of the option
     double strike_price = 0.0;
-    cout << "what is your options strike price: " << endl;
+    cout << "what is your options strike price: ";
     cin >> strike_price;
 
     // Accessing API for stock price data and treasury yield data
