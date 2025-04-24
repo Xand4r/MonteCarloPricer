@@ -1,6 +1,3 @@
-//
-// Created by Alexander on 02.03.2025.
-//
 #include "Timecalc.h"
 #include <ctime>
 #include <chrono>
@@ -9,27 +6,17 @@
 using namespace std;
 
 
-int Timecalc::DaysUntilExpiration(int d, int m, int y, string day) {
+int Timecalc::DaysUntilExpiration(int d, int m, int y, int& day) {
     int days = DaysInbetween(d, m, y); // amount of days inbetween current and input date
 
     //converts today's weekday as string to a number
-    int weekday = 0;
-        if (day == "Mon"){ weekday = 1;}
-        if (day == "Tue"){ weekday = 2;}
-        if (day == "Wed"){ weekday = 3;}
-        if (day == "Thu"){ weekday = 4;}
-        if (day == "Fri"){ weekday = 5;}
-        if (day == "Sat"){ weekday = 6;}
-        if (day == "Sun"){ weekday = 1; days -= 1;} //
+        if (day == 0){ day = 1; days -= 1;} //
 
     int whole_weeks = floor(days/7); // amount of whole weeks in the time difference
     int rest = days%7; // amount of days in the last not whole week
 
-    cout << "amount of working days: " << days- whole_weeks*2 - floor((weekday+rest)/7)*2 << endl;
-    cout << "days: " << days << endl;
-
     // removes weekends of whole weeks and the possible weekend in the last not whole week
-    return days- whole_weeks*2 - floor((weekday+rest)/7)*2;
+    return days- whole_weeks*2 - floor((day+rest)/7)*2;
 
 }
 

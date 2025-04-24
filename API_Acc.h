@@ -17,10 +17,10 @@ using json = nlohmann::json;
 
 class API_Acc {
     public:
-    vector<double> GetStockData(string& symbol, int days); //gets stockdata on a specific company from an API
-    vector<vector<double>> GetTreasuryYieldData(); //gets treasury yield rates on US government bonds
+    vector<double> GetStockData(string& symbol, int days, string API_key); //gets stockdata on a specific company from an API
+    vector<vector<double>> GetTreasuryYieldData(string API_key); //gets treasury yield rates on US government bonds
     private:
-    static size_t callback(char *content, size_t size, size_t nmemb, string data); //callback function for API calls
+    static size_t callback(char *content, size_t size, size_t nmemb, string& data); //callback function for API calls
     static json parser(const string& url); // parses received data into a json
 
 

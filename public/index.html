@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Option Pricer GUI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="head-wrap">
+        <h1>Monte-Carlo Option Pricer</h1>
+    </div>
+    <div class="container">
+        <div class="input-container">
+            <div class="input-field">
+                <div class="label-wrap">
+                    <label for="expiry"> Expiry date</label>
+                </div>
+                <div class="input-wrap">
+                    <span></span>
+                    <input type="date" id="expiry" value="0001-01-01">
+                </div>
+            </div>
+            <div class="input-field">
+                <div class="label-wrap">
+                    <label for="strike">Strike Price:</label>
+                </div>
+                <div class="input-wrap">
+                    <span>$</span>
+                    <input type="number" id="strike" placeholder=" Strike Price">
+                </div>
+            </div>
+            <div class="input-field">
+                <div class="label-wrap">
+                    <label for="symbol">Stock ticker symbol</label>
+                </div>
+                <div class="input-wrap">
+                    <span></span>
+                    <input type="text" id="symbol" placeholder="e.g.: AAPL for Apple">
+                </div>
+            </div>
+            <div class="input-field">
+                <div class="label-wrap">
+                    <label for="type">Option type</label>
+                </div>
+                <div class="input-wrap radio-wrap" style="border:none;">
+                    <span class="radio-span">
+                        <input class="radio" type="radio" id="call" value="Put" name="put-call">
+                        <label class="radio-label" for="call">Call</label>
+                    </span>
+                    <span class="radio-span" >
+                        <input class="radio" type="radio" id="put" value="Call" name="put-call">
+                        <label class="radio-label" for="put">Put</label>
+                    </span>
+                </div>
+            </div>
+            <div class="input-field">
+                <div class="label-wrap info-label-wrap">
+                    <label for="type">Pricing type</label> 
+                    <button class="info-button" onmouseover="ShowInfoBox(0)" onmouseout="HideInfoBox(0)">ⓘ</button>  
+                    <div id="info-box-0" class="info-box hidden" onmouseover="ShowInfoBox(0)" onmouseleave="HideInfoBox(0)">
+                        <p class="info-text">
+                            Option Pricing estimates the option’s value using a theoretical model. <br/>
+                            Option Evaluation uses real data to assess the option’s value and effectiveness.
+                        </p>
+                        <div class="info-box-arrow"></div>
+                        <div class="info-box-arrow shadow"></div>
+                        <div class="hoverBox"></div>
+                    </div>
+                </div>
+                <div class="input-wrap radio-wrap" style="border:none;">
+                    <span class="radio-span">
+                        <input class="radio" type="radio" id="price" value="price" name="price-evaluate">
+                        <label class="radio-label" for="price">Price</label>
+                    </span>
+                    <span class="radio-span" >
+                        <input class="radio" type="radio" id="evaluate" value="evaluate" name="price-evaluate">
+                        <label class="radio-label" for="evaluate">Evaluate</label>
+                    </span>
+                </div>
+            </div>
+            <div class="input-field">
+                <div class="label-wrap">
+                    <label for="accuracy">Calculation accuracy</label>
+                </div>
+                <div class="input-wrap radio-wrap radio-wrap-big" style="border:none;">
+                    <span class="radio-span">
+                        <input class="radio" type="radio" id="accurate" value="1000000" name="accuracy">
+                        <label class="radio-label" for="accurate">Accurate</label>
+                    </span>
+                    <span class="radio-span" >
+                        <input class="radio" type="radio" id="balanced" value="100000" name="accuracy">
+                        <label class="radio-label" for="balanced">Balanced</label>
+                    </span>
+                    <span class="radio-span" >
+                        <input class="radio" type="radio" id="quick" value="10000" name="accuracy">
+                        <label class="radio-label" for="quick">Quick</label>
+                    </span>
+                </div>
+            </div>
+            <div class="input-field">
+                <div class="label-wrap info-label-wrap">
+                    <label for="priceKey">Stock market data API key</label>	 
+                    <button class="info-button" onmouseover="ShowInfoBox(1)" onmouseout="HideInfoBox(1)">ⓘ</button>  
+                    <div id="info-box-1" class="info-box hidden" onmouseover="ShowInfoBox(1)" onmouseleave="HideInfoBox(1)">
+                        <p class="info-text">
+                            Get yout API key
+                            <a href="https://www.alphavantage.co/support/" target="_blank">here</a>.
+                        </p>
+                        <div class="info-box-arrow"></div>
+                        <div class="info-box-arrow shadow"></div>
+                        <div class="hoverBox"></div>
+                    </div> 
+                </div>
+                <div class="input-wrap">
+                    <span></span>
+                    <input type="text" id="dataKey" placeholder="">
+                </div>
+            </div>
+            <div class="input-field">
+                <div class="label-wrap info-label-wrap ">
+                    <label for="treasuryKey">Treasury yield API key</label>
+                        <button class="info-button" onmouseover="ShowInfoBox(2)" onmouseleave="HideInfoBox(2)">ⓘ</button>
+                    <div id="info-box-2" class="info-box hidden" onmouseover="ShowInfoBox(2)" onmouseleave="HideInfoBox(2)">
+                        <p class="info-text">
+                            Get yout API key
+                            <a href="https://fred.stlouisfed.org/docs/api/api_key.html" target="_blank">here</a>.
+                        </p>
+                        <div class="info-box-arrow"></div>
+                        <div class="info-box-arrow shadow"></div>
+                        <div class="hoverBox"></div>
+                    </div>
+                </div>
+                <div class="input-wrap">
+                    <span></span>
+                    <input type="text" id="yieldKey" placeholder="">
+                </div>
+            </div>
+            <div class="input-field eval-input-field">
+                <div class="eval-wrap">
+                    <button id="evalButton" onclick="calculateOption()">Calculate option price</button>
+                </div>
+            </div>
+            <div id="result-container" class="hidden">
+                <div class="input-field result-field">
+                    <p id="result">Your option is worth: </p>
+                </div>
+                <div id="loading-animation" class="hidden">
+                    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var now = new Date();
+        var month = "0" + (now.getMonth() + 1)
+        var datetime = now.getFullYear() +"-"+ month +"-"+ now.getDate();
+        document.getElementById("expiry").setAttribute("value",datetime);
+        document.getElementById("expiry").setAttribute("min",datetime);
+        document.getElementById('call').click();
+        document.getElementById('price').click();
+        document.getElementById('accurate').click();
+
+
+
+        onBox = false;
+        function toggleOnBox (){
+            onBox = !onBox;
+        }
+
+        function ShowInfoBox(i){
+            InfoBox = document.getElementById("info-box-" + i);
+            InfoBox.classList.remove("hidden");
+        }
+
+        function HideInfoBox(i){
+            InfoBox = document.getElementById("info-box-" + i);
+            InfoBox.classList.add("hidden");
+        }
+
+        function calculateOption() {
+        var expiry = document.getElementById('expiry').value;
+        var year = expiry.slice(0,4);
+        var month = expiry.slice(5,7);
+        var day = expiry.slice(8,10);
+        var weekday = now.getDay();
+        var strike = document.getElementById('strike').value;
+        var symbol = document.getElementById('symbol').value;
+        var type = document.getElementById('call').checked ? "call" : "put";
+        var pricing = document.getElementById('price').checked ? "price" : "evaluate";
+        if(document.getElementById('accurate').checked){
+            var accuracy = document.getElementById('accurate').value;
+        }else if(document.getElementById('balanced').checked){
+            var accuracy = document.getElementById('balanced').value;
+        }else{
+            var accuracy = document.getElementById('quick').value;
+        }
+        var dataKey = document.getElementById('dataKey').value;
+        var yieldKey = document.getElementById('yieldKey').value;
+        document.getElementById('result').innerText = "Your option price: "
+        document.getElementById('result-container').classList.remove("hidden");
+        document.getElementById('loading-animation').classList.remove("hidden");
+        window.scrollBy({
+            top: 1000,
+            behavior: "smooth"
+        })
+        console.log("test")
+        console.log(dataKey)
+
+        fetch('http://localhost:3000/calculate', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({day, month, year, weekday, strike, symbol, type, pricing, accuracy, dataKey, yieldKey})
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('loading-animation').classList.add("hidden");
+            document.getElementById('result').innerText = document.getElementById('result').innerText + " " + `${data.price}`;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            console.error('ErrorMessage:', error.message);
+            document.getElementById('loading-animation').classList.add("hidden");
+            document.getElementById('result').innerText = "Error: Invalid inputs!"
+        });
+    }
+    </script>
+
+    </body>
+    </html>

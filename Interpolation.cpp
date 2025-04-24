@@ -1,10 +1,6 @@
 #include "Interpolation.h"
 #include <vector>
 #include <iostream>
-#include <eigen3/Eigen/Dense>
-#include <eigen3/Eigen/Core>
-using namespace std;
-using namespace Eigen;
 
 // Constructor: Initializes data members and precomputes spline coefficients
 Interpolation::Interpolation(const vector<double>& x_vals, const vector<double>& y_vals) : x(x_vals), y(y_vals), n(x_vals.size()) {

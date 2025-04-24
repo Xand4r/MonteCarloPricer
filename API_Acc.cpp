@@ -1,5 +1,4 @@
 #include "API_Acc.h"
-
 #include <iostream>
 #include <curl/curl.h>
 #include <string>
@@ -7,7 +6,7 @@
 using namespace std;
 using json = nlohmann::json;
 
-    size_t API_Acc::callback(char* content, size_t size, size_t nmemb, string data) {
+    size_t API_Acc::callback(char* content, size_t size, size_t nmemb, string& data) {
     data.append(content, size * nmemb);
     return size * nmemb;
 }
@@ -28,8 +27,8 @@ using json = nlohmann::json;
     }
 
 //inputs a specific day amount of stockdata in a vector and returns it
-vector<double> API_Acc::GetStockData(string& symbol, int day_amount) {
-    const string url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol + "&outputsize=full&datatype=json&apikey=57QUQNLQ3C62WQIO";
+vector<double> API_Acc::GetStockData(string& symbol, int day_amount, string API_key) {
+    const string url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" + symbol + "&outputsize=full&datatype=json&apikey="+ API_key;
     vector<double> prices;
     json j = parser(url);
     json closing_prices = j["Time Series (Daily)"];
@@ -49,14 +48,14 @@ vector<double> API_Acc::GetStockData(string& symbol, int day_amount) {
     return prices;
 }
 // gets US treasury yield data for specific timeframes ranging from a month to 30 years and returns the all the rates as tuples with their corresponding maturity in a vector
-vector<vector<double>> API_Acc::GetTreasuryYieldData() {
+vector<vector<double>> API_Acc::GetTreasuryYieldData(string API_key) {
         vector<string> time_periods = {"DGS1MO", "DGS3MO", "DGS6MO", "DGS1", "DGS2", "DGS3", "DGS5", "DGS7", "DGS10", "DGS20", "DGS30"};
         vector<double> day_amount = {30.0, 90.0, 180.0, 360.0, 730.0, 1095.0, 1825.0, 2555.0, 3650.0, 7300.0, 10950.0};
         vector<vector<double>> all_treasury_yields;
 
         vector<double> values;
         for (string i : time_periods) {
-            string url = "https://api.stlouisfed.org/fred/series/observations?series_id=" + i + "&api_key=76ba0991fa6e0da31852aac2c918561e&file_type=json";
+            string url = "https://api.stlouisfed.org/fred/series/observations?series_id=" + i + "&api_key="+ API_key +"&file_type=json";
             json j = parser(url);
             double newest_yield = stod( j["observations"].back()["value"].get<string>());
             values.push_back(newest_yield);
