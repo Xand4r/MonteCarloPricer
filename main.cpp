@@ -37,8 +37,6 @@ int main(int argc, char* argv[]) {
     int accuracy = stoi(argv[9]);
     string stock_API_key = argv[10];
     string yield_API_key = argv[11];
-    //string stock_API_key = "57QUQNLQ3C62WQIO";
-    //string yield_API_key = "76ba0991fa6e0da31852aac2c918561e";
 
     // Accessing API for stock price data and treasury yield data
     API_Acc access_data;
@@ -95,7 +93,7 @@ int main(int argc, char* argv[]) {
         stock_paths.push_back(path);
     }
 
-    //calculates the expected payoff using the central limit theorem
+    //calculates the expected payoff using the law of large numbers
     double expected_payoff = -1.0;
     if (put_or_call == "call") {
         CallOption option;
