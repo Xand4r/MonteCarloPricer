@@ -38,7 +38,7 @@ In the root directory of the project:
 1. Initialize and install Node.js dependencies:  
    ```
    npm init -y  
-   npm install  
+   npm install express
    ```
 
 2. Compile the C++ backend:  
