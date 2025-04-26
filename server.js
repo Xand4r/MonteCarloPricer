@@ -22,7 +22,7 @@ app.post('/calculate', (req, res) => {
 
     let binary;
     if (os.platform() === 'win32') {
-        binary = path.join(__dirname, 'bin', 'option_pricer_windows.exe');
+        binary = path.join(__dirname, 'bin', 'option_pricer.exe');
     } else if (os.platform() === 'darwin') {
         binary = path.join(__dirname, 'bin', 'option_pricer');
     } else {
